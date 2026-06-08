@@ -89,28 +89,28 @@ export function Step2Capture() {
               <div className="mb-4">
                 <Label className="text-xs font-bold text-slate-800 flex items-center space-x-1.5">
                   <Users className="w-3.5 h-3.5 text-slate-555" />
-                  <span>Meeting Space Seats</span>
+                  <span>Private Offices Required</span>
                 </Label>
-                <p className="text-[11px] text-slate-400 mt-1 leading-normal">Common conference seating capacity</p>
+                <p className="text-[11px] text-slate-400 mt-1 leading-normal">Number of dedicated private offices needed</p>
               </div>
-              <div className="relative max-w-[140px]">
+              <div className="relative max-w-[160px]">
                 <Input 
                   type="number" 
                   min="0"
-                  className="pl-3 pr-8 py-2 rounded-xl border-slate-200 text-slate-800 font-bold focus-visible:ring-blue-600"
+                  className="pl-3 pr-24 py-2 rounded-xl border-slate-200 text-slate-800 font-bold focus-visible:ring-blue-600"
                   placeholder="0"
                   value={answers.meetingSeats || ''}
                   onChange={(e) => {
                     if (answers.meetingSeats) {
-                      removeTag(`${answers.meetingSeats} Meeting Seats`);
+                      removeTag(`${answers.meetingSeats} Private Offices`);
                     }
                     setAnswer('meetingSeats', e.target.value);
                     if (e.target.value && parseInt(e.target.value) > 0) {
-                      addTag(`${e.target.value} Meeting Seats`);
+                      addTag(`${e.target.value} Private Offices`);
                     }
                   }}
                 />
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">Pax</span>
+                <span className="absolute right-9 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 pointer-events-none">Offices</span>
               </div>
             </Card>
 
@@ -169,27 +169,7 @@ export function Step2Capture() {
               </div>
             </Card>
 
-            {/* Style / Elevation */}
-            <Card className="border-slate-200 bg-white rounded-2xl p-5 shadow-sm">
-              <div className="mb-4">
-                <Label className="text-xs font-bold text-slate-800 flex items-center space-x-1.5">
-                  <Eye className="w-3.5 h-3.5 text-slate-555" />
-                  <span>Building Style / Elevation</span>
-                </Label>
-                <p className="text-[11px] text-slate-400 mt-1 leading-normal">Visual facade and material standard</p>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {['Standard', 'HQ / Premium', 'Industrial', 'No preference'].map(val => (
-                  <OptionButton 
-                    key={val} 
-                    selected={answers.buildingStyle === val} 
-                    onClick={() => handleSelect('buildingStyle', val, 'Style')}
-                  >
-                    {val}
-                  </OptionButton>
-                ))}
-              </div>
-            </Card>
+
 
           </div>
         </div>
@@ -199,8 +179,7 @@ export function Step2Capture() {
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-3">Environmental Specs</span>
           <div className="grid md:grid-cols-2 gap-4">
             {[
-              { id: 'spaceConstrained', label: 'Space-Constrained Site?', desc: 'Footprint limits' },
-              { id: 'premiumFinishes', label: 'Premium Finishes?', desc: 'Upgraded trim & fixtures' },
+              { id: 'premiumFinishes', label: 'High Profile / Premium Site?', desc: 'Upgraded facade & fixtures' },
               { id: 'multiStory', label: 'Multi-Story Complex?', desc: 'Stacked multi-levels' },
               { id: 'blastResistant', label: 'Blast Resistant Space?', desc: 'Hardened structure security' },
               { id: 'officeStorage', label: 'Office / Storage Combo?', desc: 'Dual-use floorplan' },

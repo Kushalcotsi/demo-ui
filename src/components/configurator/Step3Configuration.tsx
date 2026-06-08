@@ -136,13 +136,13 @@ export function Step3Configuration() {
             </div>
           </div>
 
-          <div className="border-2 border-dashed border-slate-200 bg-slate-50/60 rounded-2xl h-64 relative overflow-hidden flex flex-col justify-between p-4">
+          <div className="border-2 border-dashed border-slate-200 bg-slate-50/60 rounded-2xl h-80 relative overflow-hidden flex flex-col justify-center items-center py-12 px-8">
             
             {/* Grid overlay */}
             <div className="absolute inset-0 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:16px_16px] opacity-40 pointer-events-none" />
 
             {/* Layout Box - The building perimeter */}
-            <div className="w-full h-44 border-2 border-slate-400 bg-white rounded-lg relative flex items-stretch shadow-inner overflow-hidden">
+            <div className="w-full h-44 border-2 border-slate-400 bg-white rounded-lg relative flex items-stretch shadow-inner overflow-visible">
               
               {/* Main Entrance Door & Access */}
               <div className="absolute bottom-0 left-[15%] flex flex-col items-center translate-y-[100%] z-30">
@@ -179,18 +179,12 @@ export function Step3Configuration() {
               <div className="absolute top-0 right-[20%] w-8 h-1 bg-sky-200 border-x border-slate-400 z-30" title="Window" />
               <div className="absolute top-0 left-[40%] w-8 h-1 bg-sky-200 border-x border-slate-400 z-30" title="Window" />
 
-              {/* HVAC Units in layout */}
+              {/* External HVAC Unit */}
               {answers.hvac && (
-                <>
-                  <div className="absolute top-0 left-1/4 bg-blue-600 text-white px-2 py-1 rounded-b-md text-[8px] font-extrabold uppercase shadow-sm animate-in slide-in-from-top-2 z-20 flex flex-col items-center justify-center">
-                    <Wind className="w-3 h-3 opacity-90 mb-0.5" />
-                    <span>HVAC V-1</span>
-                  </div>
-                  <div className="absolute bottom-0 right-1/4 bg-blue-600 text-white px-2 py-1 rounded-t-md text-[8px] font-extrabold uppercase shadow-sm animate-in slide-in-from-bottom-2 z-20 flex flex-col items-center justify-center">
-                    <span>HVAC V-2</span>
-                    <Wind className="w-3 h-3 opacity-90 mt-0.5" />
-                  </div>
-                </>
+                <div className="absolute -top-7 right-[5%] bg-slate-800 text-white px-3 py-1.5 rounded-t-lg text-[9px] font-extrabold uppercase shadow-md animate-in slide-in-from-bottom-2 z-20 flex flex-col items-center justify-center border-x border-t border-slate-700">
+                  <Wind className="w-3.5 h-3.5 opacity-90 mb-1 text-sky-300" />
+                  <span>HVAC PACK</span>
+                </div>
               )}
 
               {/* Restroom Block */}
@@ -214,7 +208,7 @@ export function Step3Configuration() {
                 )}
               </AnimatePresence>
 
-              {/* Meeting Space Seats Visualizer */}
+              {/* Private Offices Visualizer */}
               <div className="flex-1 flex flex-col items-center justify-center space-y-2 z-10 px-4 relative overflow-hidden">
                 <div className="flex items-center space-x-1.5 text-slate-400 mb-1 opacity-60">
                   <Grid className="w-3.5 h-3.5" />
@@ -222,7 +216,7 @@ export function Step3Configuration() {
                 </div>
                 
                 <span className="text-[12px] text-slate-700 font-bold text-center leading-tight max-w-[200px]">
-                  {answers.meetingSeats ? `${answers.meetingSeats} Collaborative Seats Configured` : 'Open Plan / Unassigned Area'}
+                  {answers.meetingSeats ? `${answers.meetingSeats} Private Offices Configured` : 'Open Plan / Unassigned Area'}
                 </span>
                 
                 <div className="flex flex-wrap justify-center gap-2 mt-2">
@@ -232,11 +226,11 @@ export function Step3Configuration() {
                       animate={{ scale: 1 }} 
                       transition={{ delay: i * 0.05 }}
                       key={i} 
-                      className="w-3 h-3 rounded-full bg-blue-100 border border-blue-300 shadow-sm" 
+                      className="w-5 h-5 rounded-sm bg-blue-50 border border-blue-200 shadow-sm" 
                     />
                   ))}
                   {parseInt(answers.meetingSeats || 0) > 8 && (
-                    <span className="text-[10px] font-extrabold text-blue-600 flex items-center justify-center h-3">+{parseInt(answers.meetingSeats) - 8}</span>
+                    <span className="text-[10px] font-extrabold text-blue-600 flex items-center justify-center h-5">+{parseInt(answers.meetingSeats) - 8}</span>
                   )}
                 </div>
               </div>
@@ -271,7 +265,7 @@ export function Step3Configuration() {
             </div>
 
             {/* Scale indicator */}
-            <div className="flex items-center justify-between text-[10px] text-slate-500 font-bold px-1 relative z-10 mt-3">
+            <div className="flex items-center justify-between text-[10px] text-slate-500 font-bold w-full px-2 absolute bottom-3 z-10">
               <span>0' (Wall A)</span>
               <div className="flex-1 border-t border-dashed border-slate-300 mx-4 relative">
                 <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-50 px-2 py-0.5 text-[9px] text-slate-400 font-bold rounded shadow-sm border border-slate-200">1,440 SQ FT AREA</span>
