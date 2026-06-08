@@ -7,9 +7,23 @@ export interface ConfigVersion {
   tags: string[];
   answers: Record<string, any>;
   currentStep: number;
+  highestStep: number;
+}
+
+export interface Customer {
+  id: string;
+  name: string;
+  company: string;
+  status: string;
+  date: string;
 }
 
 interface ConfigStore {
+  customers: Customer[];
+  activeCustomerId: string | null;
+  setActiveCustomer: (id: string | null) => void;
+  addCustomer: (c: Customer) => void;
+
   customerName: string;
   setCustomerName: (name: string) => void;
   
@@ -40,19 +54,33 @@ const createNewVersion = (id: string, name: string): ConfigVersion => ({
   tags: [],
   answers: {},
   currentStep: 1,
+  highestStep: 1,
 });
 
+const DEFAULT_CUSTOMERS: Customer[] = [
+  { id: 'c1', name: 'John Doe', company: 'Acme Corp', status: 'Active', date: '2026-06-01' },
+  { id: 'c2', name: 'Jane Smith', company: 'Global Build Inc', status: 'Pending', date: '2026-06-05' },
+];
+
 export const useDemoStore = create<ConfigStore>((set, get) => ({
+  customers: DEFAULT_CUSTOMERS,
+  activeCustomerId: 'c1',
+  setActiveCustomer: (id) => {
+    const customer = get().customers.find(c => c.id === id);
+    set({ activeCustomerId: id, customerName: customer ? customer.company : '' });
+  },
+  addCustomer: (c) => set((state) => ({ customers: [...state.customers, c] })),
+
   customerName: 'Acme Corp',
   setCustomerName: (name) => set({ customerName: name }),
 
-  versions: [createNewVersion('v1', 'Option 1')],
+  versions: [createNewVersion('v1', 'Requirement 1')],
   activeVersionId: 'v1',
 
   addVersion: () => {
     const { versions } = get();
     const newId = `v${Date.now()}`;
-    const newVersion = createNewVersion(newId, `Option ${versions.length + 1}`);
+    const newVersion = createNewVersion(newId, `Requirement ${versions.length + 1}`);
     set({
       versions: [...versions, newVersion],
       activeVersionId: newId,
@@ -76,7 +104,11 @@ export const useDemoStore = create<ConfigStore>((set, get) => ({
   setIsComparing: (val) => set({ isComparing: val }),
 
   setStep: (step) => set((state) => ({
-    versions: state.versions.map(v => v.id === state.activeVersionId ? { ...v, currentStep: step } : v)
+    versions: state.versions.map(v => v.id === state.activeVersionId ? { 
+      ...v, 
+      currentStep: step,
+      highestStep: Math.max(v.highestStep, step)
+    } : v)
   })),
 
   setSolutionType: (type) => set((state) => ({

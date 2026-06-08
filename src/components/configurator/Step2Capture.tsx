@@ -1,13 +1,13 @@
 'use client';
 
 import React from 'react';
-import { useDemoStore, useActiveConfig } from '@/store/useDemoStore';
+import { useActiveConfig } from '@/store/useDemoStore';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { Card, CardHeader, CardContent, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Users, Eye, HelpCircle, Hammer, Info } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
@@ -15,10 +15,8 @@ export function Step2Capture() {
   const { setStep, answers, setAnswer, addTag, removeTag } = useActiveConfig();
 
   const handleSelect = (key: string, value: any, tagLabel?: string) => {
-    // For single select (radio behavior)
     setAnswer(key, value);
     if (tagLabel) {
-      // Remove old tag if exists
       if (answers[key]) removeTag(`${tagLabel}: ${answers[key]}`);
       if (value !== '0' && value !== 'No') {
         addTag(`${tagLabel}: ${value}`);
@@ -50,153 +48,196 @@ export function Step2Capture() {
     onClick: () => void, 
     children: React.ReactNode 
   }) => (
-    <button
+    <Button
+      variant={selected ? "default" : "outline"}
       onClick={onClick}
       className={cn(
-        "px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 border",
+        "px-4 py-2.5 rounded-xl text-xs font-bold transition-all duration-300 border h-auto",
         selected 
-          ? "bg-slate-900 text-white border-slate-900 shadow-md" 
-          : "bg-white text-slate-600 border-slate-200 hover:border-slate-300 hover:bg-slate-50"
+          ? "bg-blue-600/10 text-blue-800 border-blue-600 ring-1 ring-blue-600 shadow-sm hover:bg-blue-600/15" 
+          : "bg-white text-slate-650 border-slate-200 hover:border-slate-300 hover:bg-slate-50 hover:text-slate-800"
       )}
     >
       {children}
-    </button>
+    </Button>
   );
 
   return (
     <motion.div 
-      initial={{ opacity: 0, y: 10 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
+      exit={{ opacity: 0, y: -12 }}
+      transition={{ duration: 0.35, ease: 'easeOut' }}
       className="space-y-8"
     >
       <div>
-        <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Key Requirements</h2>
-        <p className="text-slate-500 mt-2">Select your primary needs. You can add manual requirements at the bottom.</p>
+        <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">Key Requirements</h2>
+        <p className="text-slate-500 mt-2 text-sm leading-relaxed">
+          Specify core space, capacity, and architectural features. Our AI updates recommendations in real-time.
+        </p>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="space-y-6">
         
-        {/* Meeting Space Seats */}
-        <Card className="p-5 border-slate-200 shadow-sm">
-          <div className="mb-4">
-            <Label className="text-xs font-bold tracking-wider text-slate-500 uppercase">Meeting Space Seats</Label>
-            <p className="text-xs text-slate-400 mt-1">Conference / Collaboration seating in common area</p>
-          </div>
-          <Input 
-            type="number" 
-            min="0"
-            className="w-32"
-            placeholder="0"
-            value={answers.meetingSeats || ''}
-            onChange={(e) => {
-              setAnswer('meetingSeats', e.target.value);
-              if (e.target.value && parseInt(e.target.value) > 0) {
-                addTag(`${e.target.value} Meeting Seats`);
-              }
-            }}
-          />
-        </Card>
+        {/* Section 1: Capacity & Facilities */}
+        <div>
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-3">Capacity & Facilities</span>
+          <div className="grid md:grid-cols-2 gap-4">
+            
+            {/* Meeting Space Seats */}
+            <Card className="border-slate-200 bg-white rounded-2xl p-5 shadow-sm">
+              <div className="mb-4">
+                <Label className="text-xs font-bold text-slate-800 flex items-center space-x-1.5">
+                  <Users className="w-3.5 h-3.5 text-slate-555" />
+                  <span>Meeting Space Seats</span>
+                </Label>
+                <p className="text-[11px] text-slate-400 mt-1 leading-normal">Common conference seating capacity</p>
+              </div>
+              <div className="relative max-w-[140px]">
+                <Input 
+                  type="number" 
+                  min="0"
+                  className="pl-3 pr-8 py-2 rounded-xl border-slate-200 text-slate-800 font-bold focus-visible:ring-blue-600"
+                  placeholder="0"
+                  value={answers.meetingSeats || ''}
+                  onChange={(e) => {
+                    setAnswer('meetingSeats', e.target.value);
+                    if (e.target.value && parseInt(e.target.value) > 0) {
+                      addTag(`${e.target.value} Meeting Seats`);
+                    }
+                  }}
+                />
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">Pax</span>
+              </div>
+            </Card>
 
-        {/* Restrooms */}
-        <Card className="p-5 border-slate-200 shadow-sm">
-          <div className="mb-4">
-            <Label className="text-xs font-bold tracking-wider text-slate-500 uppercase">Restrooms in Unit</Label>
-            <p className="text-xs text-slate-400 mt-1">Private restrooms inside the unit</p>
+            {/* Restrooms */}
+            <Card className="border-slate-200 bg-white rounded-2xl p-5 shadow-sm">
+              <div className="mb-4">
+                <Label className="text-xs font-bold text-slate-800 flex items-center space-x-1.5">
+                  <Info className="w-3.5 h-3.5 text-slate-555" />
+                  <span>Restrooms in Unit</span>
+                </Label>
+                <p className="text-[11px] text-slate-400 mt-1 leading-normal">Internal plumbing & toilet units count</p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {['0', '1', '2', '3+'].map(val => (
+                  <OptionButton 
+                    key={val} 
+                    selected={answers.restrooms === val} 
+                    onClick={() => handleSelect('restrooms', val, 'Restrooms')}
+                  >
+                    {val === '0' ? 'None' : `${val} Unit`}
+                  </OptionButton>
+                ))}
+              </div>
+            </Card>
+
           </div>
-          <div className="flex flex-wrap gap-2">
-            {['0', '1', '2', '3+'].map(val => (
-              <OptionButton 
-                key={val} 
-                selected={answers.restrooms === val} 
-                onClick={() => handleSelect('restrooms', val, 'Restrooms')}
-              >
-                {val}
-              </OptionButton>
+        </div>
+
+        {/* Section 2: Exterior, Elevation & Access */}
+        <div>
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-3">Architecture & Access</span>
+          <div className="grid gap-4">
+            
+            {/* Access Requirements */}
+            <Card className="border-slate-200 bg-white rounded-2xl p-5 shadow-sm">
+              <div className="mb-4">
+                <Label className="text-xs font-bold text-slate-800 flex items-center space-x-1.5">
+                  <Hammer className="w-3.5 h-3.5 text-slate-555" />
+                  <span>Building Access Requirements</span>
+                </Label>
+                <p className="text-[11px] text-slate-400 mt-1 leading-normal">Specify compliance requirements for entrances (Select all that apply)</p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {['Ground-level entry', 'ADA ramp required', 'Stairs acceptable', 'Multi-entry points'].map(val => {
+                  const isSelected = (answers.accessReqs || []).includes(val);
+                  return (
+                    <OptionButton 
+                      key={val} 
+                      selected={isSelected} 
+                      onClick={() => handleMultiSelect('accessReqs', val)}
+                    >
+                      {val}
+                    </OptionButton>
+                  );
+                })}
+              </div>
+            </Card>
+
+            {/* Style / Elevation */}
+            <Card className="border-slate-200 bg-white rounded-2xl p-5 shadow-sm">
+              <div className="mb-4">
+                <Label className="text-xs font-bold text-slate-800 flex items-center space-x-1.5">
+                  <Eye className="w-3.5 h-3.5 text-slate-555" />
+                  <span>Building Style / Elevation</span>
+                </Label>
+                <p className="text-[11px] text-slate-400 mt-1 leading-normal">Visual facade and material standard</p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {['Standard', 'HQ / Premium', 'Industrial', 'No preference'].map(val => (
+                  <OptionButton 
+                    key={val} 
+                    selected={answers.buildingStyle === val} 
+                    onClick={() => handleSelect('buildingStyle', val, 'Style')}
+                  >
+                    {val}
+                  </OptionButton>
+                ))}
+              </div>
+            </Card>
+
+          </div>
+        </div>
+
+        {/* Section 3: Engineering & Environmental Specifications */}
+        <div>
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-3">Environmental Specs</span>
+          <div className="grid md:grid-cols-2 gap-4">
+            {[
+              { id: 'spaceConstrained', label: 'Space-Constrained Site?', desc: 'Footprint limits' },
+              { id: 'premiumFinishes', label: 'Premium Finishes?', desc: 'Upgraded trim & fixtures' },
+              { id: 'multiStory', label: 'Multi-Story Complex?', desc: 'Stacked multi-levels' },
+              { id: 'blastResistant', label: 'Blast Resistant Space?', desc: 'Hardened structure security' },
+              { id: 'officeStorage', label: 'Office / Storage Combo?', desc: 'Dual-use floorplan' },
+            ].map((q) => (
+              <Card key={q.id} className="border-slate-200 bg-white rounded-2xl p-5 shadow-sm">
+                <div className="mb-4">
+                  <Label className="text-xs font-bold text-slate-850 block">{q.label}</Label>
+                  <p className="text-[11px] text-slate-400 mt-1 leading-normal">{q.desc}</p>
+                </div>
+                <div className="flex gap-2">
+                  <OptionButton 
+                    selected={answers[q.id] === 'Yes'} 
+                    onClick={() => handleSelect(q.id, 'Yes', q.label.replace('?', ''))}
+                  >
+                    Yes
+                  </OptionButton>
+                  <OptionButton 
+                    selected={answers[q.id] === 'No'} 
+                    onClick={() => handleSelect(q.id, 'No')}
+                  >
+                    No
+                  </OptionButton>
+                </div>
+              </Card>
             ))}
           </div>
-        </Card>
+        </div>
 
-        {/* Access Requirements */}
-        <Card className="p-5 border-slate-200 shadow-sm md:col-span-2">
+        {/* Section 4: Manual Requirements */}
+        <Card className="border-slate-200 bg-white rounded-2xl p-5 shadow-sm">
           <div className="mb-4">
-            <Label className="text-xs font-bold tracking-wider text-slate-500 uppercase">Building Access Requirements</Label>
-            <p className="text-xs text-slate-400 mt-1">How occupants and visitors enter (Select all that apply)</p>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {['Ground-level entry', 'ADA ramp required', 'Stairs acceptable', 'Multi-entry points'].map(val => {
-              const isSelected = (answers.accessReqs || []).includes(val);
-              return (
-                <OptionButton 
-                  key={val} 
-                  selected={isSelected} 
-                  onClick={() => handleMultiSelect('accessReqs', val)}
-                >
-                  {val}
-                </OptionButton>
-              );
-            })}
-          </div>
-        </Card>
-
-        {/* Style / Elevation */}
-        <Card className="p-5 border-slate-200 shadow-sm md:col-span-2">
-          <div className="mb-4">
-            <Label className="text-xs font-bold tracking-wider text-slate-500 uppercase">Building Style / Elevation</Label>
-            <p className="text-xs text-slate-400 mt-1">Visual and architectural preference</p>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {['Standard', 'HQ / Premium', 'Industrial', 'No preference'].map(val => (
-              <OptionButton 
-                key={val} 
-                selected={answers.buildingStyle === val} 
-                onClick={() => handleSelect('buildingStyle', val, 'Style')}
-              >
-                {val}
-              </OptionButton>
-            ))}
-          </div>
-        </Card>
-
-        {/* Binary Questions */}
-        {[
-          { id: 'spaceConstrained', label: 'Space-Constrained Site?', desc: 'Limited site area restricting unit placement' },
-          { id: 'premiumFinishes', label: 'Premium Finishes Required?', desc: 'Upgraded interior materials & fixtures' },
-          { id: 'multiStory', label: 'Multi-Story Required?', desc: 'Stacked or multi-level configuration' },
-          { id: 'blastResistant', label: 'Blast Resistant Space?', desc: 'Hardened structure for security environments' },
-          { id: 'officeStorage', label: 'Office / Storage Combo?', desc: 'Unit with integrated storage space' },
-        ].map((q) => (
-          <Card key={q.id} className="p-5 border-slate-200 shadow-sm">
-            <div className="mb-4">
-              <Label className="text-xs font-bold tracking-wider text-slate-500 uppercase">{q.label}</Label>
-              <p className="text-xs text-slate-400 mt-1">{q.desc}</p>
-            </div>
-            <div className="flex gap-2">
-              <OptionButton 
-                selected={answers[q.id] === 'Yes'} 
-                onClick={() => handleSelect(q.id, 'Yes', q.label.replace('?', ''))}
-              >
-                YES
-              </OptionButton>
-              <OptionButton 
-                selected={answers[q.id] === 'No'} 
-                onClick={() => handleSelect(q.id, 'No')}
-              >
-                NO
-              </OptionButton>
-            </div>
-          </Card>
-        ))}
-
-        {/* Manual Entry */}
-        <Card className="p-5 border-slate-200 shadow-sm md:col-span-2">
-          <div className="mb-4">
-            <Label className="text-xs font-bold tracking-wider text-slate-500 uppercase">Other Specific Requirements</Label>
-            <p className="text-xs text-slate-400 mt-1">Anything else we should know? (Custom layouts, special equipment, etc.)</p>
+            <Label className="text-xs font-bold text-slate-800 flex items-center space-x-1.5">
+              <HelpCircle className="w-3.5 h-3.5 text-slate-555" />
+              <span>Other Specific Engineering Requests</span>
+            </Label>
+            <p className="text-[11px] text-slate-400 mt-1 leading-normal">Enter site instructions, specific mechanical requests, or layout directives.</p>
           </div>
           <Textarea 
-            placeholder="e.g., We need a reinforced floor for heavy machinery..."
-            className="resize-none"
+            placeholder="e.g., Heavy duty floor loading capability, specialized computer lab wiring routing..."
+            className="resize-none rounded-xl border-slate-200 text-slate-800 text-xs min-h-[90px] focus-visible:ring-blue-600"
             value={answers.manualEntry || ''}
             onChange={(e) => setAnswer('manualEntry', e.target.value)}
           />
@@ -204,13 +245,21 @@ export function Step2Capture() {
 
       </div>
 
-      <div className="flex justify-end pt-4">
+      <div className="flex justify-between pt-4">
+        <Button 
+          variant="outline"
+          onClick={() => setStep(1)} 
+          size="lg" 
+          className="text-slate-600 font-bold px-6 border-slate-200 hover:bg-slate-50 rounded-xl"
+        >
+          Back
+        </Button>
         <Button 
           onClick={() => setStep(3)} 
           size="lg" 
-          className="bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold shadow-md"
+          className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 shadow-md shadow-blue-600/10 rounded-xl"
         >
-          Get My Unit Recommendation
+          Generate Recommendations
           <ArrowRight className="w-4 h-4 ml-2" />
         </Button>
       </div>

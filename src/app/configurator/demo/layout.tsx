@@ -11,7 +11,7 @@ export default function ConfiguratorLayout({ children }: { children: React.React
 
       <div className="flex flex-1 overflow-hidden">
         {/* Left Sidebar - Progress */}
-        <div className="w-[20%] min-w-[250px] border-r border-slate-200 bg-white">
+        <div className="w-[20%] min-w-[250px] shrink-0 bg-slate-955">
           <Sidebar />
         </div>
 
@@ -23,7 +23,7 @@ export default function ConfiguratorLayout({ children }: { children: React.React
         </div>
 
         {/* Right Column - AI Recommendations & Summary */}
-        <div className="w-[25%] min-w-[300px] border-l border-slate-200 bg-white z-10">
+        <div className="w-[25%] min-w-[300px] border-l border-slate-200 bg-white z-10 flex flex-col h-full overflow-hidden">
           <RightPanel />
         </div>
       </div>

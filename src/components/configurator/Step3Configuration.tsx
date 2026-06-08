@@ -1,14 +1,14 @@
 'use client';
 
 import React from 'react';
-import { useDemoStore, useActiveConfig } from '@/store/useDemoStore';
+import { useActiveConfig } from '@/store/useDemoStore';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Card } from '@/components/ui/card';
-import { ArrowRight } from 'lucide-react';
+import { Card, CardHeader, CardContent, CardTitle, CardDescription } from '@/components/ui/card';
+import { ArrowRight, Sliders, Layout, Map, Wind, Eye, DoorClosed, Grid } from 'lucide-react';
 
 export function Step3Configuration() {
   const { answers, setAnswer, setStep, addTag, removeTag } = useActiveConfig();
@@ -31,86 +31,226 @@ export function Step3Configuration() {
 
   return (
     <motion.div 
-      initial={{ opacity: 0, y: 10 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
+      exit={{ opacity: 0, y: -12 }}
+      transition={{ duration: 0.35, ease: 'easeOut' }}
       className="space-y-8"
     >
       <div>
-        <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Refine Configuration</h2>
-        <p className="text-slate-500 mt-2">Adjust your requirements. Our AI will update its recommendations in real-time.</p>
+        <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">Refine Configuration</h2>
+        <p className="text-slate-500 mt-2 text-sm leading-relaxed">
+          Customize interior fittings and system amenities. Our blueprint engine maps placements instantly.
+        </p>
       </div>
 
-      <div className="space-y-6">
+      <div className="grid md:grid-cols-1 gap-6">
         
-        {/* Q1: Restroom */}
-        <Card className="p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <Label className="text-base font-semibold">Include Restroom?</Label>
-              <p className="text-sm text-slate-500 mt-1">Add internal restroom facilities to the unit.</p>
+        {/* Left Column / Controls */}
+        <div className="space-y-4">
+          
+          {/* Restroom Toggle Card */}
+          <Card className="border-slate-200 bg-white rounded-2xl p-5 shadow-sm hover:border-slate-300 transition-colors">
+            <div className="flex items-center justify-between">
+              <div className="space-y-1">
+                <Label className="text-sm font-bold text-slate-800 flex items-center space-x-2">
+                  <Layout className="w-4 h-4 text-slate-600" />
+                  <span>Include Plumbed Restroom</span>
+                </Label>
+                <p className="text-[11px] text-slate-400 leading-normal">Integrate a private internal washroom facility inside the unit.</p>
+              </div>
+              <Switch 
+                checked={answers.restroom || false} 
+                onCheckedChange={(c) => handleToggle('restroom', c, 'Restroom')}
+                className="data-[state=checked]:bg-blue-600"
+              />
             </div>
-            <Switch 
-              checked={answers.restroom || false} 
-              onCheckedChange={(c) => handleToggle('restroom', c, 'Restroom')}
-            />
+          </Card>
+
+          {/* Restroom Select Sub-card */}
+          <AnimatePresence>
+            {answers.restroom && (
+              <motion.div
+                initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                animate={{ opacity: 1, height: 'auto', marginTop: 12 }}
+                exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                transition={{ duration: 0.25 }}
+                className="overflow-hidden"
+              >
+                <Card className="p-5 bg-slate-50/40 border-blue-200 relative rounded-2xl">
+                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-600 rounded-l-2xl" />
+                  <div className="space-y-3.5 ml-2">
+                    <Label className="text-xs font-bold text-slate-800">Select Restroom Standard</Label>
+                    <Select 
+                      onValueChange={(v) => handleSelect('restroomType', v, answers.restroomType, 'Restroom')}
+                      value={answers.restroomType || "Standard"}
+                    >
+                      <SelectTrigger className="bg-white rounded-xl border-slate-200 text-xs font-bold focus:ring-blue-600">
+                        <SelectValue placeholder="Select restroom type..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Standard">Standard Facility</SelectItem>
+                        <SelectItem value="ADA">ADA Compliant (Wheelchair accessible)</SelectItem>
+                        <SelectItem value="Multi-stall">Multi-stall Complex</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </Card>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* HVAC Toggle Card */}
+          <Card className="border-slate-200 bg-white rounded-2xl p-5 shadow-sm hover:border-slate-300 transition-colors">
+            <div className="flex items-center justify-between">
+              <div className="space-y-1">
+                <Label className="text-sm font-bold text-slate-800 flex items-center space-x-2">
+                  <Wind className="w-4 h-4 text-slate-600" />
+                  <span>HVAC Climate Control</span>
+                </Label>
+                <p className="text-[11px] text-slate-400 leading-normal">Smart heating, ventilation, and air conditioning package.</p>
+              </div>
+              <Switch 
+                checked={answers.hvac || false} 
+                onCheckedChange={(c) => handleToggle('hvac', c, 'HVAC Included')}
+                className="data-[state=checked]:bg-blue-600"
+              />
+            </div>
+          </Card>
+
+        </div>
+
+        {/* Blueprint Floorplan Mockup Card */}
+        <Card className="border-slate-200 bg-white rounded-2xl p-5 shadow-sm">
+          <div className="mb-4 flex items-center justify-between">
+            <div>
+              <Label className="text-xs font-bold text-slate-850 flex items-center space-x-2">
+                <Map className="w-4 h-4 text-slate-600" />
+                <span>Interactive Floorplan Blueprint</span>
+              </Label>
+              <p className="text-[11px] text-slate-400 mt-1 leading-normal">Real-time placement schema mapping.</p>
+            </div>
+            <div className="bg-blue-50 text-blue-700 border border-blue-200 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center space-x-1 shadow-sm">
+              <Eye className="w-3 h-3" />
+              <span>Live Schema Preview</span>
+            </div>
           </div>
-        </Card>
 
-        <AnimatePresence>
-          {answers.restroom && (
-            <motion.div
-              initial={{ opacity: 0, height: 0, marginTop: 0 }}
-              animate={{ opacity: 1, height: 'auto', marginTop: 24 }}
-              exit={{ opacity: 0, height: 0, marginTop: 0 }}
-              className="overflow-hidden"
-            >
-              <Card className="p-6 bg-slate-50/50 border-blue-100 relative">
-                <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-400 rounded-l-lg" />
-                <div className="space-y-4 ml-2">
-                  <Label className="text-base font-semibold">Restroom Type</Label>
-                  <Select 
-                    onValueChange={(v) => handleSelect('restroomType', v, answers.restroomType, 'Restroom')}
-                    value={answers.restroomType}
+          <div className="border-2 border-dashed border-slate-200 bg-slate-50/60 rounded-2xl h-64 relative overflow-hidden flex flex-col justify-between p-4">
+            
+            {/* Grid overlay */}
+            <div className="absolute inset-0 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:16px_16px] opacity-40 pointer-events-none" />
+
+            {/* Layout Box - The building perimeter */}
+            <div className="w-full h-44 border-2 border-slate-400 bg-white rounded-lg relative flex items-stretch shadow-inner overflow-hidden">
+              
+              {/* Main Entrance Door */}
+              <div className="absolute bottom-0 left-[15%] w-10 h-1.5 bg-slate-100 border-x-2 border-slate-400 z-30 flex items-center justify-center translate-y-px" title="Main Entrance">
+                <div className="w-full h-px bg-slate-300" />
+              </div>
+
+              {/* Windows (Static) */}
+              <div className="absolute top-0 right-[20%] w-8 h-1 bg-sky-200 border-x border-slate-400 z-30" title="Window" />
+              <div className="absolute top-0 left-[40%] w-8 h-1 bg-sky-200 border-x border-slate-400 z-30" title="Window" />
+
+              {/* HVAC Units in layout */}
+              {answers.hvac && (
+                <>
+                  <div className="absolute top-0 left-1/4 bg-blue-600 text-white px-2 py-1 rounded-b-md text-[8px] font-extrabold uppercase shadow-sm animate-in slide-in-from-top-2 z-20 flex flex-col items-center justify-center">
+                    <Wind className="w-3 h-3 opacity-90 mb-0.5" />
+                    <span>HVAC V-1</span>
+                  </div>
+                  <div className="absolute bottom-0 right-1/4 bg-blue-600 text-white px-2 py-1 rounded-t-md text-[8px] font-extrabold uppercase shadow-sm animate-in slide-in-from-bottom-2 z-20 flex flex-col items-center justify-center">
+                    <span>HVAC V-2</span>
+                    <Wind className="w-3 h-3 opacity-90 mt-0.5" />
+                  </div>
+                </>
+              )}
+
+              {/* Restroom Block */}
+              <AnimatePresence>
+                {answers.restroom && (
+                  <motion.div
+                    initial={{ opacity: 0, width: 0 }}
+                    animate={{ opacity: 1, width: answers.restroomType === 'ADA' ? '30%' : answers.restroomType === 'Multi-stall' ? '35%' : '22%' }}
+                    exit={{ opacity: 0, width: 0 }}
+                    className="border-r-2 border-slate-300 bg-slate-50 flex flex-col items-center justify-center p-2 text-center relative z-10 shadow-[inset_-4px_0_12px_rgba(0,0,0,0.02)] overflow-hidden"
                   >
-                    <SelectTrigger className="bg-white">
-                      <SelectValue placeholder="Select type..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Standard">Standard</SelectItem>
-                      <SelectItem value="ADA">ADA Compliant</SelectItem>
-                      <SelectItem value="Multi-stall">Multi-stall</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </Card>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                    {/* Restroom Door Cutout */}
+                    <div className="absolute right-[-2px] top-[40%] w-1.5 h-8 bg-white border-y border-slate-300 z-20" />
+                    
+                    <Layout className="w-4 h-4 text-blue-500 mb-1 opacity-70" />
+                    <span className="text-[10px] font-bold text-slate-800 leading-none">Restroom</span>
+                    <span className="text-[8px] text-blue-600 mt-1 uppercase font-semibold">
+                      {answers.restroomType || 'Standard'}
+                    </span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
-        {/* Q2: HVAC */}
-        <Card className="p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <Label className="text-base font-semibold">HVAC System</Label>
-              <p className="text-sm text-slate-500 mt-1">Heating, Ventilation, and Air Conditioning.</p>
+              {/* Meeting Space Seats Visualizer */}
+              <div className="flex-1 flex flex-col items-center justify-center space-y-2 z-10 px-4 relative overflow-hidden">
+                <div className="flex items-center space-x-1.5 text-slate-400 mb-1 opacity-60">
+                  <Grid className="w-3.5 h-3.5" />
+                  <span className="text-[9px] font-bold uppercase tracking-widest leading-none">Workspace Core</span>
+                </div>
+                
+                <span className="text-[12px] text-slate-700 font-bold text-center leading-tight max-w-[200px]">
+                  {answers.meetingSeats ? `${answers.meetingSeats} Collaborative Seats Configured` : 'Open Plan / Unassigned Area'}
+                </span>
+                
+                <div className="flex flex-wrap justify-center gap-2 mt-2">
+                  {Array.from({ length: Math.min(8, parseInt(answers.meetingSeats || 0)) }).map((_, i) => (
+                    <motion.div 
+                      initial={{ scale: 0 }} 
+                      animate={{ scale: 1 }} 
+                      transition={{ delay: i * 0.05 }}
+                      key={i} 
+                      className="w-3 h-3 rounded-full bg-blue-100 border border-blue-300 shadow-sm" 
+                    />
+                  ))}
+                  {parseInt(answers.meetingSeats || 0) > 8 && (
+                    <span className="text-[10px] font-extrabold text-blue-600 flex items-center justify-center h-3">+{parseInt(answers.meetingSeats) - 8}</span>
+                  )}
+                </div>
+              </div>
+
+              {/* Outer Dimensions text */}
+              <div className="absolute right-2 bottom-2 text-[8px] font-extrabold text-slate-400 tracking-wider z-20 bg-white/90 px-1.5 py-0.5 rounded border border-slate-100 shadow-sm">
+                60' x 24' UNIT
+              </div>
+
             </div>
-            <Switch 
-              checked={answers.hvac || false} 
-              onCheckedChange={(c) => handleToggle('hvac', c, 'HVAC Included')}
-            />
+
+            {/* Scale indicator */}
+            <div className="flex items-center justify-between text-[10px] text-slate-500 font-bold px-1 relative z-10 mt-3">
+              <span>0' (Wall A)</span>
+              <div className="flex-1 border-t border-dashed border-slate-300 mx-4 relative">
+                <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-50 px-2 py-0.5 text-[9px] text-slate-400 font-bold rounded shadow-sm border border-slate-200">1,440 SQ FT AREA</span>
+              </div>
+              <span>60' (Wall B)</span>
+            </div>
+
           </div>
         </Card>
 
       </div>
 
-      <div className="flex justify-end pt-6 border-t border-slate-200">
+      <div className="flex justify-between pt-6 border-t border-slate-200">
+        <Button 
+          variant="outline"
+          onClick={() => setStep(2)} 
+          size="lg" 
+          className="text-slate-600 font-bold px-6 border-slate-200 hover:bg-slate-50 rounded-xl"
+        >
+          Back
+        </Button>
         <Button 
           onClick={() => setStep(4)} 
           size="lg" 
-          className="bg-slate-900 hover:bg-slate-800 text-white shadow-md"
+          className="bg-slate-900 hover:bg-slate-800 text-white shadow-md rounded-xl"
         >
-          View Recommendations
+          Curate AI Recommendations
           <ArrowRight className="w-4 h-4 ml-2" />
         </Button>
       </div>
