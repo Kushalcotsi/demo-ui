@@ -106,16 +106,7 @@ export function RightPanel() {
               </div>
             </Card>
 
-            {/* Compliance Badge */}
-            <div className="bg-emerald-50 border border-emerald-150 rounded-xl p-4 flex items-start space-x-3">
-              <ShieldCheck className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-              <div>
-                <span className="text-xs font-semibold text-emerald-800 block">Compliance Guard Active</span>
-                <span className="text-[11px] text-emerald-600 mt-0.5 block leading-normal">
-                  All chosen features correspond to local zone engineering guidelines.
-                </span>
-              </div>
-            </div>
+
           </div>
         ) : (
           <div className="h-full flex flex-col items-center justify-center text-center text-slate-400 mt-28 px-4">
