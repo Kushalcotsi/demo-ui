@@ -9,9 +9,9 @@ import { Check, ArrowRight, Sparkles, Building, Box, ShieldCheck } from 'lucide-
 import { motion } from 'framer-motion';
 
 const OPTIONS = [
-  { id: 'cost', label: 'Cost Optimized', price: '$850', period: 'mo', desc: 'Essential functional unit meeting baseline capacity standards.', match: '82%', icon: Box, features: ['Standard Facade Trim', 'Basic HVAC Unit', '14-Day Ground Delivery', 'Clean Interior Walls'] },
-  { id: 'rec', label: 'Recommended Tier', price: '$1,200', period: 'mo', desc: 'The optimal structural layout containing all specified site features.', match: '98%', icon: Building, features: ['Premium HQ Facade', 'Enhanced HVAC System', '7-Day Priority Shipping', 'ADA Toilet Compliance', 'Reinforced Panel Framing'], highlight: true },
-  { id: 'premium', label: 'Premium Class', price: '$1,750', period: 'mo', desc: 'Maximum performance finishes and full turnkey comfort additions.', match: '91%', icon: ShieldCheck, features: ['Architectural Elevation', 'Smart Climate Systems', '3-Day Expedited Setup', 'Premium Acoustic Tiles', 'Turnkey Furnishing Pack'] },
+  { id: 'cost', label: 'Cost Optimized', unitId: 'SM4836', unitDesc: 'Complex - Triple Wide (1584 sq. ft.)', desc: 'Essential functional unit meeting baseline capacity standards.', match: '82%', icon: Box, features: ['Standard Facade Trim', 'Basic HVAC Unit', '14-Day Ground Delivery', 'Clean Interior Walls'] },
+  { id: 'rec', label: 'Recommended Tier', unitId: 'SM5236', unitDesc: 'Complex - Triple Wide (1764 sq. ft.)', desc: 'The optimal structural layout containing all specified site features.', match: '98%', icon: Building, features: ['Premium HQ Facade', 'Enhanced HVAC System', '7-Day Priority Shipping', 'ADA Toilet Compliance', 'Reinforced Panel Framing'], highlight: true },
+  { id: 'premium', label: 'Premium Class', unitId: 'SM6036', unitDesc: 'Complex - Triple Wide (1944 sq. ft.)', desc: 'Maximum performance finishes and full turnkey comfort additions.', match: '91%', icon: ShieldCheck, features: ['Architectural Elevation', 'Smart Climate Systems', '3-Day Expedited Setup', 'Premium Acoustic Tiles', 'Turnkey Furnishing Pack'] },
 ];
 
 export function Step4Recommendations() {
@@ -67,9 +67,9 @@ export function Step4Recommendations() {
 
                 <h3 className="font-bold text-slate-800 text-base leading-tight">{opt.label}</h3>
                 
-                <div className="mt-4 flex items-baseline">
-                  <span className="text-3xl font-extrabold text-slate-900">{opt.price}</span>
-                  <span className="text-xs text-slate-400 font-semibold ml-1">/{opt.period}</span>
+                <div className="mt-4 flex flex-col items-start min-h-[48px]">
+                  <span className="text-2xl font-black text-slate-900 leading-none">{opt.unitId}</span>
+                  <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mt-1.5 leading-snug max-w-[90%]">{opt.unitDesc}</span>
                 </div>
 
                 <p className="text-xs text-slate-500 mt-2 mb-6 leading-relaxed min-h-[48px]">{opt.desc}</p>

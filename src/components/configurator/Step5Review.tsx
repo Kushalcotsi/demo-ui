@@ -95,8 +95,8 @@ export function Step5Review() {
             </div>
           </div>
           <div className="text-right">
-            <div className="text-2xl font-black text-blue-400">$1,200</div>
-            <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Estimated Monthly Rent</div>
+            <div className="text-xl font-black text-blue-400">SM6024</div>
+            <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-1">Modular Office - Double Wide</div>
           </div>
         </div>
 

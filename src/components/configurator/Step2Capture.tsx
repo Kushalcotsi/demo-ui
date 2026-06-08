@@ -101,6 +101,9 @@ export function Step2Capture() {
                   placeholder="0"
                   value={answers.meetingSeats || ''}
                   onChange={(e) => {
+                    if (answers.meetingSeats) {
+                      removeTag(`${answers.meetingSeats} Meeting Seats`);
+                    }
                     setAnswer('meetingSeats', e.target.value);
                     if (e.target.value && parseInt(e.target.value) > 0) {
                       addTag(`${e.target.value} Meeting Seats`);
@@ -259,7 +262,7 @@ export function Step2Capture() {
           size="lg" 
           className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 shadow-md shadow-blue-600/10 rounded-xl"
         >
-          Generate Recommendations
+          Configure Floor Plan
           <ArrowRight className="w-4 h-4 ml-2" />
         </Button>
       </div>

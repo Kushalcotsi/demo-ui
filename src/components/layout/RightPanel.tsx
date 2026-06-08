@@ -14,14 +14,14 @@ export function RightPanel() {
   return (
     <div className="flex flex-col h-full bg-slate-50 border-l border-slate-200">
       {/* Live Requirement Summary */}
-      <div className="p-6 border-b border-slate-200 bg-white shadow-sm z-10">
+      <div className="p-6 border-b border-slate-200 bg-white shadow-sm z-10 shrink-0">
         <h3 className="text-xs font-bold text-slate-800 tracking-wider uppercase mb-3.5 flex items-center">
           <Zap className="w-3.5 h-3.5 mr-2 text-blue-500 fill-blue-500" />
           Active Specifications
         </h3>
         
-        <ScrollArea className="max-h-[120px] pr-3 -mr-3">
-          <div className="flex flex-wrap gap-1.5">
+        <div className="max-h-[120px] overflow-y-auto pr-2 custom-scrollbar">
+          <div className="flex flex-wrap gap-1.5 pb-1">
             {tags.length === 0 && !isAnalyzing && (
               <span className="text-xs text-slate-400 font-medium">Define workspace criteria to start...</span>
             )}
@@ -40,7 +40,7 @@ export function RightPanel() {
               </Badge>
             ))}
           </div>
-        </ScrollArea>
+        </div>
       </div>
 
       {/* AI Recommendation Area */}

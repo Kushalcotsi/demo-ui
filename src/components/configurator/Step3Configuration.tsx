@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from '@/components/ui/card';
-import { ArrowRight, Sliders, Layout, Map, Wind, Eye, DoorClosed, Grid } from 'lucide-react';
+import { ArrowRight, Sliders, Layout, Map, Wind, Eye, DoorClosed, Grid, Package } from 'lucide-react';
 
 export function Step3Configuration() {
   const { answers, setAnswer, setStep, addTag, removeTag } = useActiveConfig();
@@ -144,9 +144,35 @@ export function Step3Configuration() {
             {/* Layout Box - The building perimeter */}
             <div className="w-full h-44 border-2 border-slate-400 bg-white rounded-lg relative flex items-stretch shadow-inner overflow-hidden">
               
-              {/* Main Entrance Door */}
-              <div className="absolute bottom-0 left-[15%] w-10 h-1.5 bg-slate-100 border-x-2 border-slate-400 z-30 flex items-center justify-center translate-y-px" title="Main Entrance">
-                <div className="w-full h-px bg-slate-300" />
+              {/* Main Entrance Door & Access */}
+              <div className="absolute bottom-0 left-[15%] flex flex-col items-center translate-y-[100%] z-30">
+                <div className="w-10 h-1.5 bg-slate-100 border-x-2 border-slate-400 flex items-center justify-center translate-y-[-100%]" title="Main Entrance">
+                  <div className="w-full h-px bg-slate-300" />
+                </div>
+                
+                {/* Access Visualizers */}
+                {(answers.accessReqs || []).includes('ADA ramp required') && (
+                  <motion.div 
+                    initial={{ opacity: 0, height: 0 }} 
+                    animate={{ opacity: 1, height: 40 }} 
+                    className="w-12 border-x-2 border-b-2 border-slate-300 bg-slate-100/80 relative flex items-center justify-center"
+                  >
+                    <div className="w-0.5 h-full bg-blue-300/50 mx-auto" />
+                    <span className="absolute text-[6px] font-bold text-slate-500 uppercase rotate-90 tracking-widest">ADA RAMP</span>
+                  </motion.div>
+                )}
+                {(answers.accessReqs || []).includes('Stairs acceptable') && !(answers.accessReqs || []).includes('ADA ramp required') && (
+                  <motion.div 
+                    initial={{ opacity: 0, height: 0 }} 
+                    animate={{ opacity: 1, height: 16 }} 
+                    className="w-10 flex flex-col"
+                  >
+                    <div className="h-1 border-x border-b border-slate-300 bg-slate-200" />
+                    <div className="h-1 border-x border-b border-slate-300 bg-slate-200" />
+                    <div className="h-1 border-x border-b border-slate-300 bg-slate-200" />
+                    <div className="h-1 border-x border-b border-slate-300 bg-slate-200" />
+                  </motion.div>
+                )}
               </div>
 
               {/* Windows (Static) */}
@@ -215,6 +241,28 @@ export function Step3Configuration() {
                 </div>
               </div>
 
+              {/* Storage Bay Divider */}
+              <AnimatePresence>
+                {answers.officeStorage === 'Yes' && (
+                  <motion.div
+                    initial={{ opacity: 0, width: 0 }}
+                    animate={{ opacity: 1, width: '35%' }}
+                    exit={{ opacity: 0, width: 0 }}
+                    className="border-l-4 border-double border-slate-400 bg-slate-100/50 flex flex-col items-center justify-center p-2 text-center relative z-10"
+                  >
+                    {/* Roll-up Door Cutout */}
+                    <div className="absolute right-0 bottom-[-2px] w-12 h-1.5 bg-slate-300 border-x border-slate-500 z-30 shadow-inner flex flex-col justify-evenly px-0.5">
+                      <div className="h-px bg-slate-400 w-full" />
+                      <div className="h-px bg-slate-400 w-full" />
+                    </div>
+                    
+                    <Package className="w-4 h-4 text-slate-500 mb-1 opacity-70" />
+                    <span className="text-[10px] font-bold text-slate-600 leading-none tracking-widest uppercase">Storage Bay</span>
+                    <span className="text-[8px] text-slate-400 mt-1 uppercase font-semibold">Roll-Up Access</span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
               {/* Outer Dimensions text */}
               <div className="absolute right-2 bottom-2 text-[8px] font-extrabold text-slate-400 tracking-wider z-20 bg-white/90 px-1.5 py-0.5 rounded border border-slate-100 shadow-sm">
                 60' x 24' UNIT
@@ -248,9 +296,9 @@ export function Step3Configuration() {
         <Button 
           onClick={() => setStep(4)} 
           size="lg" 
-          className="bg-slate-900 hover:bg-slate-800 text-white shadow-md rounded-xl"
+          className="bg-slate-900 hover:bg-slate-800 text-white shadow-md rounded-xl font-bold"
         >
-          Curate AI Recommendations
+          Submit to AI Intelligence
           <ArrowRight className="w-4 h-4 ml-2" />
         </Button>
       </div>
