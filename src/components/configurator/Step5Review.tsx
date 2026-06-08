@@ -9,7 +9,7 @@ import { FileText, Download, CheckCircle2, Building, Calendar, ClipboardCheck } 
 import { motion } from 'framer-motion';
 
 export function Step5Review() {
-  const { solutionType, tags, answers } = useActiveConfig();
+  const { solutionType, tags, answers, setStep } = useActiveConfig();
   const [generated, setGenerated] = React.useState(false);
   const [downloading, setDownloading] = React.useState(false);
 
